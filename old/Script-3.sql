@@ -1,0 +1,1 @@
+select * from rds_config rc 
