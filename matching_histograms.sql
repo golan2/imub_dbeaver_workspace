@@ -26,23 +26,13 @@
 --
 
 
--- How many pairs?
-SELECT COUNT(DISTINCT (independent_variable, dependent_variable)) 
-FROM ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc;
-
--- How many episodes?
-select count(*)
-FROM ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc ts
-group by ts.independent_variable, ts.dependent_variable
-limit 1
-
 
 select count(*) from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc
 
 
 --  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-
+select * from settings
 
 
 

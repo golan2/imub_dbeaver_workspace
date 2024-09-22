@@ -1,169 +1,9 @@
-select * from models where model_id in ('c2cf325e-58e2-4078-ab90-408868a0530d')
+SELECT * FROM ts_98fe6ab331764edaa322b57bbe15c98d where "timestamp" >= '2024-05-03 14:00' order by "timestamp" 
 
-select * from model_statistics where model_id='c2cf325e-58e2-4078-ab90-408868a0530d' order by updated_at desc
 
-select count(*) from ts_c2cf325e58e24078ab90408868a0530d_pairs_calc
+--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~
 
-select dependent_variable,independent_variable, count(*) from ts_c2cf325e58e24078ab90408868a0530d_pairs_calc group by dependent_variable,independent_variable
-
-select count(*) from (select distinct dependent_variable,independent_variable from ts_c2cf325e58e24078ab90408868a0530d_pairs_calc ) as t
-
-select independent_variable, dependent_variable, bin, count(*)
-from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc 
-where independent_variable='fc670021_pv' and dependent_variable='fc670007_am_op' 
-and add_constant_gain >= 0 and add_constant_gain <= 1
-
-
-select count(*)
-from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc 
-where independent_variable='pc670009_pv' and dependent_variable='lpg_rate' and add_constant_gain >= 0.2 and add_constant_gain <=0.6
-
-ts_c2cf325e58e24078ab90408868a0530d_bins
-
-
-select independent_variable, dependent_variable, episode_end, add_constant_gain  
-from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc  
-whwere episode_end in (
-	select episode_end 
-	from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc 
-	where independent_variable='pc670009_pv' and dependent_variable='lpg_rate' and add_constant_gain >= 0.2 and add_constant_gain <=0.3
-) 
-
-
-SELECT dependent_variable,independent_variable, array_remove(array_agg(add_constant_gain), NULL) as add_constant_gain, null as ramp_gain, null as stochastic_gain  
-FROM "ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc" 
-WHERE episode_end in (
-	select episode_end from "ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc" where independent_variable='fc670021_pv' and dependent_variable='fc670007_am_op' and add_constant_gain >= 0.700000 and add_constant_gain <= 0.780703
-	) 
-GROUP BY dependent_variable,independent_variable
-
-
-select distinct independent_variable from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc
-
-select distinct dependent_variable from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc
-
-
-select independent_variable, dependent_variable, array_agg(add_constant_gain)  
-from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc  
-where episode_end in (
-	select episode_end 
-	from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc 
-	where independent_variable='pc670009_pv' and dependent_variable='lpg_rate' and add_constant_gain >= 0.2 and add_constant_gain <=0.21
-)
-group by independent_variable, dependent_variable
-
-
-select "dependent_variable","independent_variable","episode_start","episode_end", episode_start + interval '294 MINUTE' as start_, (EXTRACT(EPOCH FROM episode_end) - EXTRACT(EPOCH FROM episode_start))/60 as DiffMinutes,"data_source","add_constant_gain" from "ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc" 
-where independent_variable='pc670009_pv' and dependent_variable='fc670703_pv' 
-and episode_end >= '2022-08-01 UTC' and episode_end < '2022-08-02'
-order by episode_start ASC 
-
-alter table ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc drop middle 
-
--- delete from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc where independent_variable='x' and dependent_variable='y' 
-
-select "dependent_variable","independent_variable","episode_start","episode_end", episode_start + interval '300 MINUTE' as start_, add_constant_gain
-from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc where independent_variable='x'
-
-INSERT INTO ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc
-(independent_variable, dependent_variable, episode_start, episode_end, data_source, add_constant_gain)
-VALUES('x', 'y', '2022-07-31 00:00:00.000 +0000', '2022-07-31 00:00:00.000 +0000', 'train', 0);
-
-INSERT INTO ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc
-(independent_variable, dependent_variable, episode_start, episode_end, data_source, add_constant_gain)
-VALUES('x', 'y', '2022-08-01 00:00:00.000 +0000', '2022-08-01 09:54:00.000 +0000', 'train', 0);
-
-select "dependent_variable","independent_variable","episode_start","episode_end", episode_start + interval '294 MINUTE' as start_, (EXTRACT(EPOCH FROM episode_end) - EXTRACT(EPOCH FROM episode_start))/60 as DiffMinutes,"data_source","add_constant_gain" from "ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc" 
-where independent_variable='x' and dependent_variable='y' 
-and episode_end >= '2022-08-01 UTC' and episode_end < '2022-08-02'
-order by episode_start ASC 
-
-
-
-SELECT * FROM "models" where metadata->>'component_type' = 'dlp'
-
-
-select * from ts_9f2cd043cdf84ddc8b1f2c8fb447197b_episodes 
-
-
-SELECT min(episode_end) as min_time,max(episode_end) as max_time,min(add_constant_gain) as min_gain,max(add_constant_gain) as max_gain FROM "ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc" WHERE "dependent_variable" = 'fc670703_pv' AND "independent_variable" = 'pc670009_pv'
-
-SELECT "episode_start","episode_end","data_source","add_constant_gain" FROM "ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc" WHERE "dependent_variable" = 'fc670703_pv' AND "independent_variable" = 'pc670009_pv' AND episode_end >= '2022-08-01 00:00:00' AND episode_end <= '2022-08-01 00:00:05' AND data_source IN ('train') ORDER BY episode_start
-
-
-SELECT "dependent_variable","independent_variable","episode_start","episode_end","data_source","add_constant_gain","ramp_gain","stochastic_gain" FROM "ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc" WHERE "dependent_variable" = 'fc670703_pv' AND "independent_variable" = 'pc670009_pv' limit 10
-
-
-
-
-
-SELECT
-  table_name,
-  column_name,
-  data_type,
-  is_nullable,
-  ordinal_position
-FROM INFORMATION_SCHEMA.COLUMNS
-WHERE table_name = 'ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc';
-
-select count(*) from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc where add_constant_gain > -0.14497832 and add_constant_gain < -0.14497830
-
-
-SELECT
-/*    conname AS constraint_name,
-    contype AS constraint_type,
-    indkey AS index_columns,
-    relname AS table_name*/ *
-FROM pg_catalog.pg_constraint
-JOIN pg_catalog.pg_class
-ON pg_catalog.pg_class.oid = pg_catalog.pg_constraint.conrelid
-WHERE relname = 'ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc'
-AND contype IN ('p', 'u', 'c');
-
-select * from pg_catalog.pg_constraint
-
-select * from pg_catalog.pg_class
-
-select  attname,  typname 
-FROM pg_catalog.pg_attribute
-JOIN pg_catalog.pg_type ON pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid
-WHERE attrelid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc')
-AND attnum IN (SELECT attnum FROM pg_catalog.pg_attribute WHERE attname = 'add_constant_gain');
-
-
-
-
-alter table ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc
-
-
-select episode_end from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc where independent_variable='fc670021_pv' and dependent_variable='fc670007_am_op' and add_constant_gain >= 0.780600 and add_constant_gain <= 0.780703
-
-
-select * from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc 
-where independent_variable='pc670009_pv' and dependent_variable='fc670007_am_op'
-and episode_end in (select episode_end from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc where independent_variable='fc670021_pv' and dependent_variable='fc670007_am_op' and add_constant_gain >= 0.780600 and add_constant_gain <= 0.780703)
-order by episode_end
-
-
-
- SELECT * FROM "ts_c2cf325e58e24078ab90408868a0530d_pairs_calc" WHERE "dependent_variable" = 'pc670009_pv' -- AND "independent_variable" = 'fc670703_pv' 
- --AND add_constant_gain >= 0.700000 AND add_constant_gain <= 0.900000
-
-
-delete from model_statistics where model_id = 'c2cf325e-58e2-4078-ab90-408868a0530d_'
-
-UPDATE model_statistics SET model_id = 'c2cf325e-58e2-4078-ab90-408868a0530d_' WHERE model_id = 'c2cf325e-58e2-4078-ab90-408868a0530d';
-
-delete from models where model_id = 'c2cf325e-58e2-4078-ab90-408868a0530d_'
-
-UPDATE models SET model_id = 'c2cf325e-58e2-4078-ab90-408868a0530d_' WHERE model_id = 'c2cf325e-58e2-4078-ab90-408868a0530d';
-
-
-select * from ts_c2cf325e58e24078ab90408868a0530d_pairs_calc limit 10
-
-SELECT * FROM "models" where metadata->>'component_type' = 'dlp'
-
- -- e2d113e0-c558-4b40-b255-c688f8a4d349        -- 
+ -- e2d113e0-c558-4b40-b255-c688f8a4d349        -- dlp [90 pairs]
 
  -- 9f2cd043-cdf8-4ddc-8b1f-2c8fb447197b		-- Mordechai
  
@@ -173,15 +13,176 @@ SELECT * FROM "models" where metadata->>'component_type' = 'dlp'
  
  -- 440aef1e-b880-4cf6-83f1-8552db69e8a2		-- shap ok 
 
- -- c2cf325e-58e2-4078-ab90-408868a0530d		-- dlp 
+ -- c2cf325e-58e2-4078-ab90-408868a0530d		-- dlp [15 pairs]
 
  -- d67ebf13-b1e6-44a6-814e-bb520d4700af		-- INF
+ 
+-- Utils
+
+select * from locks l
+delete from locks where name='DlpEpisodeMigrationJob'
+insert into locks (name, expires_at) values ('one', Now())
+
+select * from settings s order by id
+
+select * from models order by model_id 
+
+-- Models
+select
+metadata->>'component_type' as ModelType,
+model_id,
+extra_metadata,
+status, metadata->>'name' as model_name, metadata->>'unit' as model_unit, metadata->>'customer' as model_customer, metadata->>'full_site' as model_site, metadata, tags_to_columns  from models
+where metadata->>'component_type' = 'dlc'
+and status = 'loaded'
+
+where model_id in (
+    '122ddc31-e3e5-4cc1-90fa-ae07413306ab',
+    'b9dd355d-2096-40df-8be0-fc55d008ef8d'
+    'b132062b-56ab-4d5f-8cc0-4f0e44dd8d1a'
+	)
 
 
-_CREATE TABLE ts_c2cf325e58e24078ab90408868a0530d_bins (
-	independent_variable text NOT NULL,
-	dependent_variable text NOT NULL,
-	episode_end timestamptz NOT NULL,
-	data_source text NOT NULL,
-	add_constant_gain smallint NULL
-);
+
+-- Model Statistics
+select * from model_statistics ms 
+where model_id ='ffdea061-fa26-4589-8b42-f45414351c18' --in ('ffdea061-fa26-4589-8b42-f45414351c18', '78ef6526-57ba-4952-bdf7-6ecdf527a467', 'e2d113e0-c558-4b40-b255-c688f8a4d349', 'c2cf325e-58e2-4078-ab90-408868a0530d', '9f2cd043-cdf8-4ddc-8b1f-2c8fb447197b')
+order by "type", model_id
+
+-- How many pairs
+WITH data_0 AS (
+    SELECT episode_start, jsonb_object_keys(add_constant_gain) AS keys FROM ts_9b72f88c4aab49cb9d97d6d0fea65e68_dlp_episode
+),
+data_1 AS (
+    SELECT episode_start, count(*) as json_size from data_0 GROUP BY episode_start
+)
+SELECT 
+    min(json_size) AS min_json_size, max(json_size) AS max_json_size, avg(json_size) AS avg_json_size FROM data_1
+
+-- List all pairs
+SELECT distinct jsonb_object_keys(add_constant_gain) AS pair_name
+FROM ts_78ef652657ba4952bdf76ecdf527a467_dlp_episode
+order by pair_name
+
+-- How many episodes?
+select count(*)
+FROM ts_ffdea061fa2645898b42f45414351c18_pairs_calc ts
+group by ts.independent_variable, ts.dependent_variable
+limit 1
+
+select count(*)
+FROM ts_78ef652657ba4952bdf76ecdf527a467_dlp_episode
+
+
+-- Pairs
+SELECT count(*) FROM "ts_78ef652657ba4952bdf76ecdf527a467_pairs_calc"
+
+-- DLP Models
+SELECT (metadata->>'component_type')::text as model_type, * FROM "models" -- where (metadata->>'component_type')::text = 'dlp'
+
+
+--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~
+-- MIGRATION
+
+delete from model_statistics ms 
+where model_id ='78ef6526-57ba-4952-bdf7-6ecdf527a467'
+and "type" = 'error_histogram_per_variable';
+
+delete from locks where name='DlpEpisodeMigrationJob'
+
+
+
+
+
+-- Not Migrated (error_histogram_per_variable)
+SELECT *  FROM "models"
+where metadata->>'component_type' = 'dlp'
+and model_id not in (
+	select model_id from model_statistics ms where ms."type" ='error_histogram_per_variable'
+)
+
+-- Not Migrated (based on tables)
+SELECT substring(table_name FROM 4 FOR 32) AS table_part
+FROM information_schema.tables
+WHERE table_name LIKE 'ts_%%_pairs_calc'
+and   substring(table_name FROM 4 FOR 32) not in (
+	SELECT substring(table_name FROM 4 FOR 32) AS table_part
+	FROM information_schema.tables
+	WHERE table_name LIKE 'ts_%%_dlp_episode'
+)
+
+-- Migrate Ignore List
+SELECT unnest(string_to_array(value, ',')) AS value
+FROM settings
+WHERE key = 'dlp_episode_migration_ignored_models_csv';
+
+--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~
+
+-- NaN NaN NaN
+
+select *
+from ts_c2cf325e58e24078ab90408868a0530d_pairs_calc
+where episode_start >= '2022-09-20 00:00'
+and episode_start <= '2022-09-30 03:15'
+and independent_variable ='ti8916' and dependent_variable='fc1018'
+
+
+update ts_c2cf325e58e24078ab90408868a0530d_pairs_calc
+set ramp_gain=add_constant_gain 
+where episode_start >= '2022-09-20 00:00'
+and episode_start <= '2022-09-30 03:15'
+and independent_variable ='ti8916' and dependent_variable='fc1018'
+
+update ts_c2cf325e58e24078ab90408868a0530d_pairs_calc
+set add_constant_gain = 'NaN'
+where episode_start >= '2022-09-20 00:00'
+and episode_start <= '2022-09-30 03:15'
+and independent_variable ='ti8916' and dependent_variable='fc1018'
+
+select add_constant_gain->>'ti8916__fc1018', * from ts_c2cf325e58e24078ab90408868a0530d_dlp_episode
+where episode_start >= '2022-09-20 02:00'
+
+
+INSERT INTO ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc
+(independent_variable, dependent_variable, episode_start, episode_end, data_source, add_constant_gain)
+VALUES('x', 'y', '2022-08-01 00:00:00.000 +0000', '2022-08-01 09:54:00.000 +0000', 'train', 0);
+
+
+-- delete from ts_e2d113e0c5584b40b255c688f8a4d349_pairs_calc where independent_variable='x' and dependent_variable='y'
+
+--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~
+
+
+
+--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~
+
+
+SELECT relname AS table_name, 
+       reltuples::bigint AS row_count
+FROM pg_class
+WHERE relname LIKE 'ts\_%\_dlp\_episode' ESCAPE '\'
+order by row_count desc 
+limit 100000
+
+SELECT 
+    relname AS table_name,
+    n_live_tup AS row_count
+FROM 
+    pg_stat_user_tables
+
+    
+DO $$
+DECLARE
+    m_table_name TEXT;
+    row_count BIGINT;
+BEGIN
+    FOR m_table_name IN 
+        SELECT table_name 
+        FROM information_schema.tables 
+        WHERE table_name LIKE 'ts\_%\_dlp\_episode' ESCAPE '\' AND table_schema = 'public' 
+    LOOP
+        EXECUTE 'SELECT COUNT(*) FROM ' || m_table_name INTO row_count;
+        RAISE NOTICE '%, %', m_table_name, row_count;
+    END LOOP;
+END $$;
+
