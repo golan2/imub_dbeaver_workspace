@@ -1,0 +1,17 @@
+/.idea/
+/bin/
+*.log
+
+/vendor/
+*.exe
+cmd/backend/__debug_bin
+/helm/charts/postgresql-11.9.11.tgz
+/helm/Chart.lock
+.DS_Store
+.idea/
+coverage.txt
+coverage.xml
+go_build_model_analysis_service_cmd_backend
+go_build_model_analysis_service_cmd_importer
+libtensorflow
+.run
